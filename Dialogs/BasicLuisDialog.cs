@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Bot.Builder.Dialogs;
@@ -61,7 +62,9 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Wetter")]
         public async Task WetterIntent(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync($"{result.Entities[0].Entity}");
+            var test = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase));
+
+            await context.PostAsync($"{test}");
         }
     }
 }
