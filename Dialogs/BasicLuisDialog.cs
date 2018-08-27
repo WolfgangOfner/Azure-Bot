@@ -61,7 +61,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Wetter")]
         public async Task WetterIntent(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync($"Hello");
+            await context.PostAsync($"{result.Entities[0].Entity}");
         }
     }
 }
