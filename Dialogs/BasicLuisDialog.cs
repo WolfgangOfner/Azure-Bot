@@ -57,5 +57,11 @@ namespace Microsoft.Bot.Sample.LuisBot
             //await context.PostAsync($"Tow mice chewing on a film roll. One of them goes: \"I think the book was better.\"... Sorry I am not funny");
             await context.PostAsync($"Hello");
         }
+
+        [LuisIntent("Wetter")]
+        public async Task WetterIntent(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync($"Hello");
+        }
     }
 }
