@@ -80,7 +80,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 answer = "In der von Ihnen angegebenen Stadt befindet sich noch keine unserer Fillialen";
             }
 
-            await context.PostAsync($"{answer}");
+            await context.PostAsync($"Stadt: {test}, Antwort:{answer}");
         }
     }
 }
