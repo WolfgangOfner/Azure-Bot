@@ -2,7 +2,7 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Chronic;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
@@ -59,12 +59,28 @@ namespace Microsoft.Bot.Sample.LuisBot
             await context.PostAsync($"Hello");
         }
 
-        [LuisIntent("Wetter")]
-        public async Task WetterIntent(IDialogContext context, LuisResult result)
+        [LuisIntent("Öffnungszeiten")]
+        public async Task ÖffnungszeitenIntent(IDialogContext context, LuisResult result)
         {
-            var test = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase));
+            var test = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase)).ToString();
+            string answer;
 
-            await context.PostAsync($"{test}");
+            if (test.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
+            {
+                answer =
+                    "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr";
+            }
+            else if (test.Equals("Luzern", StringComparison.OrdinalIgnoreCase))
+            {
+                answer =
+                    "Die Öffnungszeiten für die Filliale in Luzern sind Montag bis Freitag 9 Uhr - 19 Uhr, Samstags 9 Uhr - 18 Uhr";
+            }
+            else
+            {
+                answer = "In der von Ihnen angegebenen Stadt befindet sich noch keine unserer Fillialen";
+            }
+
+            await context.PostAsync($"{answer}");
         }
     }
 }
