@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Chronic;
-using LuisBot.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
@@ -237,10 +237,12 @@ namespace Microsoft.Bot.Sample.LuisBot
         public async Task JokeIntent(IDialogContext context, LuisResult result)
         {
             //await context.PostAsync($"Tow mice chewing on a film roll. One of them goes: \"I think the book was better.\"... Sorry I am not funny");
-            var test = new AnnualPlanDialog("Premium");
-            test.StartAsync(context);
+            string message = $"Let's see...I know a good joke...";
 
-            //await context.PostAsync($"Hello");
+            await context.PostAsync(message);
+
+            await context.Forward(new JokeDialog(), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
+
         }
 
         [LuisIntent("Öffnungszeiten")]
@@ -265,6 +267,11 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
 
             await context.PostAsync($"{answer}");
+        }
+
+        private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Done<object>(null);
         }
     }
 }
