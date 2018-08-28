@@ -13,6 +13,7 @@ namespace LuisBot.Dialogs
     {
         static bool subscribedToNewsletter;
         int count = 0;
+        private bool finished = false;
 
         public Task StartAsync(IDialogContext context)
         {
@@ -24,6 +25,8 @@ namespace LuisBot.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var message = await result as Activity;
+
+            
 
             if (count == 0)
             {
@@ -39,25 +42,37 @@ namespace LuisBot.Dialogs
             }
             else if (count == 1)
             {
-                if (subscribedToNewsletter && message.ToString().Equals("yes", StringComparison.OrdinalIgnoreCase))
+                if (subscribedToNewsletter && message.ToString().Equals("ja", StringComparison.OrdinalIgnoreCase))
                 {
                     subscribedToNewsletter = false;
                     await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
                 }
-                else if (subscribedToNewsletter && message.ToString().Equals("no", StringComparison.OrdinalIgnoreCase))
+                else if (!subscribedToNewsletter && message.ToString().Equals("ja", StringComparison.OrdinalIgnoreCase))
                 {
                     subscribedToNewsletter = true;
-                    await context.PostAsync("Sie haben den Newsletter abonniert");
+                    await context.PostAsync("Geben Sie bitte Ihre E-Mail Adresse ein");
+                    count++;
+                }
+                else if (message.ToString().Equals("nein", StringComparison.OrdinalIgnoreCase))
+                {
+                    await context.PostAsync("Ich habe nichts gemacht");
+                    finished = true;
                 }
                 else
                 {
                     await context.PostAsync("Sorry ich habe Sie nicht verstanden");
                 }
             }
+            else if (count == 2)
+            {
+                await context.PostAsync("Sie haben den Newsletter abonniert");
+                finished = true;
+            }
 
-
-            context.Wait(MessageReceivedAsync);
-           
+            if (!finished)
+            {
+                context.Wait(MessageReceivedAsync);
+            }
         }
 
         //private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
