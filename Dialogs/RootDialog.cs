@@ -22,11 +22,10 @@ namespace LuisBot.Dialogs
             return Task.CompletedTask;
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var message = await result as string;
-
-            
+            var answer = await result;
+            var message = answer.Text;
 
             if (count == 0)
             {
