@@ -24,7 +24,7 @@ namespace LuisBot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
-            var message = await result as Activity;
+            var message = await result as string;
 
             
 
@@ -42,30 +42,30 @@ namespace LuisBot.Dialogs
             }
             else if (count == 1)
             {
-                if (subscribedToNewsletter && message.ToString().Equals("ja", StringComparison.OrdinalIgnoreCase))
+                if (subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
                 {
                     subscribedToNewsletter = false;
                     await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
                 }
-                else if (!subscribedToNewsletter && message.ToString().Equals("ja", StringComparison.OrdinalIgnoreCase))
+                else if (!subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
                 {
-                    subscribedToNewsletter = true;
                     await context.PostAsync("Geben Sie bitte Ihre E-Mail Adresse ein");
                     count++;
                 }
-                else if (message.ToString().Equals("nein", StringComparison.OrdinalIgnoreCase))
+                else if (message.Equals("nein", StringComparison.OrdinalIgnoreCase))
                 {
                     await context.PostAsync("Ich habe nichts gemacht");
                     finished = true;
                 }
                 else
                 {
-                    await context.PostAsync($"Sorry ich habe Sie nicht verstanden {message.ToString()}");
+                    await context.PostAsync($"Sorry ich habe Sie nicht verstanden {message}");
                 }
             }
             else if (count == 2)
             {
                 await context.PostAsync("Sie haben den Newsletter abonniert");
+                subscribedToNewsletter = true;
                 finished = true;
             }
 
