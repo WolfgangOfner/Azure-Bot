@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Chronic;
+using LuisBot.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
@@ -56,21 +57,24 @@ namespace Microsoft.Bot.Sample.LuisBot
         public async Task JokeIntent(IDialogContext context, LuisResult result)
         {
             //await context.PostAsync($"Tow mice chewing on a film roll. One of them goes: \"I think the book was better.\"... Sorry I am not funny");
-            await context.PostAsync($"Hello");
+            var test = new AnnualPlanDialog("Premium");
+            test.StartAsync(context);
+
+            //await context.PostAsync($"Hello");
         }
 
         [LuisIntent("Öffnungszeiten")]
         public async Task ÖffnungszeitenIntent(IDialogContext context, LuisResult result)
         {
-            var test = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase));
+            var city = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase));
             string answer;
             
-            if (test.Entity.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
+            if (city.Entity.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
             {
                 answer =
                     "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr";
             }
-            else if (test.Entity.Equals("Luzern", StringComparison.OrdinalIgnoreCase))
+            else if (city.Entity.Equals("Luzern", StringComparison.OrdinalIgnoreCase))
             {
                 answer =
                     "Die Öffnungszeiten für die Filliale in Luzern sind Montag bis Freitag 9 Uhr - 19 Uhr, Samstags 9 Uhr - 18 Uhr";
@@ -80,7 +84,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 answer = "In der von Ihnen angegebenen Stadt befindet sich noch keine unserer Fillialen";
             }
 
-            await context.PostAsync($"Stadt: {test}, Antwort:{answer}");
+            await context.PostAsync($"{answer}");
         }
     }
 }
