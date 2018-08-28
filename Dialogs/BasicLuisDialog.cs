@@ -272,8 +272,6 @@ namespace Microsoft.Bot.Sample.LuisBot
         private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
         {
             PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
-            
-            context.Done<object>(null);
         }
 
         private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
@@ -282,13 +280,15 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
             {
-                await context.Forward(new JokeDialog(), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
+                await context.PostAsync("yes");
             }
             else
             {
-                context.PostAsync("Bye bye");
+                await context.PostAsync("no");
             }
-            
+
+            context.Wait(MessageReceived);
+
         }
     }
 }
