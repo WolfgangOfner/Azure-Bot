@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Chronic;
+using LuisBot.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
@@ -224,7 +225,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Help")]
         public async Task HelpIntent(IDialogContext context, LuisResult result)
         {
-            await this.ShowLuisResult(context, result);
+            await context.Forward(new RootDialog(), null, context.Activity, CancellationToken.None);
         }
 
         private async Task ShowLuisResult(IDialogContext context, LuisResult result) 
@@ -272,7 +273,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
         {
-           PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
+           //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
         }
 
         private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
