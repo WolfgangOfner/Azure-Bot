@@ -60,7 +60,7 @@ namespace LuisBot.Dialogs
                 }
                 else
                 {
-                    await context.PostAsync("Sorry ich habe Sie nicht verstanden");
+                    await context.PostAsync($"Sorry ich habe Sie nicht verstanden {message.ToString()}");
                 }
             }
             else if (count == 2)
