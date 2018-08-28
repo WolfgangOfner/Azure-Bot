@@ -243,6 +243,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             await context.Forward(new JokeDialog(), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
 
+
         }
 
         [LuisIntent("Öffnungszeiten")]
@@ -271,7 +272,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
         {
-            PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
+           PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
         }
 
         private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
