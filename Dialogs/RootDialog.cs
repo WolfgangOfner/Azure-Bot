@@ -11,7 +11,7 @@ namespace LuisBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        static string username;
+        static bool subscribedToNewsletter;
         int count = 0;
 
         public Task StartAsync(IDialogContext context)
@@ -25,21 +25,61 @@ namespace LuisBot.Dialogs
         {
             var message = await result as Activity;
 
-            if (count > 0)
-                username = message.Text;
-
-            if (string.IsNullOrEmpty(username))
+            if (count == 0)
             {
-                await context.PostAsync("what is your good name");
                 count++;
+                if (subscribedToNewsletter)
+                {
+                    await context.PostAsync("Möchten Sie sich vom Newsletter abmelden?");
+                }
+                else
+                {
+                    await context.PostAsync("Möchten Sie sich am Newsletter anmelden?");
+                }
             }
-            else
+            else if (count == 1)
             {
-                await context.PostAsync($"Hello {username} , How may help You");
-
+                if (subscribedToNewsletter && message.ToString().Equals("yes", StringComparison.OrdinalIgnoreCase))
+                {
+                    subscribedToNewsletter = false;
+                    await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
+                }
+                else if (subscribedToNewsletter && message.ToString().Equals("no", StringComparison.OrdinalIgnoreCase))
+                {
+                    subscribedToNewsletter = true;
+                    await context.PostAsync("Sie haben den Newsletter abonniert");
+                }
+                else
+                {
+                    await context.PostAsync("Sorry ich habe Sie nicht verstanden");
+                }
             }
+
 
             context.Wait(MessageReceivedAsync);
+           
         }
+
+        //private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
+        //{
+        //    //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
+        //}
+
+        //private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    string test = await result;
+
+        //    if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        await context.PostAsync("yes");
+        //    }
+        //    else
+        //    {
+        //        await context.PostAsync("no");
+        //    }
+
+        //    context.Wait(MessageReceived);
+
+        //}
     }
     }
