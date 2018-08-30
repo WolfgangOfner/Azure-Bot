@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using System;
+using System.Threading.Tasks;
 
 namespace LuisBot.Dialogs
 {
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        static bool _subscribedToNewsletter;
+        private static bool _subscribedToNewsletter;
         private int _count;
         private bool _finished;
 
@@ -85,27 +82,5 @@ namespace LuisBot.Dialogs
                 context.Wait(MessageReceivedAsync);
             }
         }
-
-        //private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
-        //{
-        //    //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
-        //}
-
-        //private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
-        //{
-        //    string test = await result;
-
-        //    if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        await context.PostAsync("yes");
-        //    }
-        //    else
-        //    {
-        //        await context.PostAsync("no");
-        //    }
-
-        //    context.Wait(MessageReceived);
-
-        //}
     }
-    }
+}

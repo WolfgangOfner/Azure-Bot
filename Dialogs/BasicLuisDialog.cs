@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LuisBot.Dialogs;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -224,24 +225,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Newsletter")]
         public async Task NewsletterIntent(IDialogContext context, LuisResult result)
         {
-            var heroCard = new HeroCard
-            {
-                Title = "Help",
-                Text = "Need assisstance?",
-                Buttons = new List<CardAction> {
-                    new CardAction(ActionTypes.OpenUrl, "Contact Us", value: "https://stackoverflow.com/questions/tagged/botframework"),
-                    new CardAction(ActionTypes.OpenUrl, "FAQ", value: "https://docs.microsoft.com/bot-framework")
-                }
-            };
-
-            var _activity = new Activity();
-            var reply = _activity.CreateReply();
-
-            reply.Attachments.Add(heroCard.ToAttachment());
-
-            _activity = reply;
-
-            await context.PostAsync(_activity);
+            await context.Forward(new RootDialog(), null, context.Activity, CancellationToken.None);
         }
 
         private async Task ShowLuisResult(IDialogContext context, LuisResult result)
