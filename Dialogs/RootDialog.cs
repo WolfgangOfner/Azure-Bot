@@ -49,6 +49,7 @@ namespace LuisBot.Dialogs
                     {
                         _subscribedToNewsletter = false;
                         await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
+                        _finished = true;
                     }
                     else if (!_subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
                     {

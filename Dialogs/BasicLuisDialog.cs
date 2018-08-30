@@ -219,7 +219,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new CommonResponsesDialog("my message"), null, context.Activity, CancellationToken.None);
+            await context.Forward(new CommonResponsesDialog(""), null, context.Activity, CancellationToken.None);
             
            //context.MakeMessage().Attachments.Add(new Attachment()
            // {
