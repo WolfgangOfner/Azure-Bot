@@ -1,14 +1,13 @@
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Luis;
+using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Chronic;
-using LuisBot.Dialogs;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Luis;
-using Microsoft.Bot.Builder.Luis.Models;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -17,8 +16,8 @@ namespace Microsoft.Bot.Sample.LuisBot
     public class BasicLuisDialog : LuisDialog<object>
     {
         public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
-            ConfigurationManager.AppSettings["LuisAppId"], 
-            ConfigurationManager.AppSettings["LuisAPIKey"], 
+            ConfigurationManager.AppSettings["LuisAppId"],
+            ConfigurationManager.AppSettings["LuisAPIKey"],
             domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
         {
         }
@@ -222,18 +221,35 @@ namespace Microsoft.Bot.Sample.LuisBot
             await this.ShowLuisResult(context, result);
         }
 
-        [LuisIntent("Help")]
-        public async Task HelpIntent(IDialogContext context, LuisResult result)
+        [LuisIntent("Newsletter")]
+        public async Task NewsletterIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new RootDialog(), null, context.Activity, CancellationToken.None);
+            var heroCard = new HeroCard
+            {
+                Title = "Help",
+                Text = "Need assisstance?",
+                Buttons = new List<CardAction> {
+                    new CardAction(ActionTypes.OpenUrl, "Contact Us", value: "https://stackoverflow.com/questions/tagged/botframework"),
+                    new CardAction(ActionTypes.OpenUrl, "FAQ", value: "https://docs.microsoft.com/bot-framework")
+                }
+            };
+
+            var _activity = new Activity();
+            var reply = _activity.CreateReply();
+
+            reply.Attachments.Add(heroCard.ToAttachment());
+
+            _activity = reply;
+
+            await context.PostAsync(_activity);
         }
 
-        private async Task ShowLuisResult(IDialogContext context, LuisResult result) 
+        private async Task ShowLuisResult(IDialogContext context, LuisResult result)
         {
             await context.PostAsync($"You have reached {result.Intents[0].Intent}. You said: {result.Query}");
             context.Wait(MessageReceived);
         }
-        
+
         [LuisIntent("Joke ")]
         public async Task JokeIntent(IDialogContext context, LuisResult result)
         {
@@ -252,7 +268,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         {
             var city = result.Entities.First(x => x.Type.Equals("Stadt", StringComparison.OrdinalIgnoreCase));
             string answer;
-            
+
             if (city.Entity.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
             {
                 answer =
@@ -273,12 +289,12 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
         {
-           //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
+            //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
         }
 
         private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
         {
-            string test =  await result;
+            string test = await result;
 
             if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
             {

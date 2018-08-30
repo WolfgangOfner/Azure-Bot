@@ -11,9 +11,9 @@ namespace LuisBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        static bool subscribedToNewsletter;
-        int count = 0;
-        private bool finished = false;
+        static bool _subscribedToNewsletter;
+        private int _count;
+        private bool _finished;
 
         public Task StartAsync(IDialogContext context)
         {
@@ -27,48 +27,60 @@ namespace LuisBot.Dialogs
             var answer = await result;
             var message = answer.Text;
 
-            if (count == 0)
+            if (string.IsNullOrWhiteSpace(message))
             {
-                count++;
-                if (subscribedToNewsletter)
-                {
-                    await context.PostAsync("Möchten Sie sich vom Newsletter abmelden?");
-                }
-                else
-                {
-                    await context.PostAsync("Möchten Sie sich am Newsletter anmelden?");
-                }
-            }
-            else if (count == 1)
-            {
-                if (subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
-                {
-                    subscribedToNewsletter = false;
-                    await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
-                }
-                else if (!subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
-                {
-                    await context.PostAsync("Geben Sie bitte Ihre E-Mail Adresse ein");
-                    count++;
-                }
-                else if (message.Equals("nein", StringComparison.OrdinalIgnoreCase))
-                {
-                    await context.PostAsync("Ich habe nichts gemacht");
-                    finished = true;
-                }
-                else
-                {
-                    await context.PostAsync($"Sorry ich habe Sie nicht verstanden {message}");
-                }
-            }
-            else if (count == 2)
-            {
-                await context.PostAsync("Sie haben den Newsletter abonniert");
-                subscribedToNewsletter = true;
-                finished = true;
+                await context.PostAsync("Bitte geben Sie etwas ein");
+                context.Wait(MessageReceivedAsync);
             }
 
-            if (!finished)
+            switch (_count)
+            {
+                case 0:
+                    _count++;
+                    if (_subscribedToNewsletter)
+                    {
+                        await context.PostAsync("Möchten Sie sich vom Newsletter abmelden?");
+                    }
+                    else
+                    {
+                        await context.PostAsync("Möchten Sie sich am Newsletter anmelden?");
+                    }
+
+                    break;
+                case 1:
+                    if (_subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _subscribedToNewsletter = false;
+                        await context.PostAsync("Sie wurden vom Newsletter abgemeldet");
+                    }
+                    else if (!_subscribedToNewsletter && message.Equals("ja", StringComparison.OrdinalIgnoreCase))
+                    {
+                        await context.PostAsync("Geben Sie bitte Ihre E-Mail Adresse ein");
+                        _count++;
+                    }
+                    else if (message.Equals("nein", StringComparison.OrdinalIgnoreCase))
+                    {
+                        await context.PostAsync("Ich habe nichts gemacht");
+                        _finished = true;
+                    }
+                    else
+                    {
+                        await context.PostAsync("Sorry ich habe Sie nicht verstanden");
+                    }
+
+                    break;
+                case 2:
+                    await context.PostAsync("Geben Sie bitte Ihren Namen ein");
+                    _count++;
+                    break;
+                case 3:
+                    await context.PostAsync("Sie haben den Newsletter abonniert");
+                    _subscribedToNewsletter = true;
+                    _finished = true;
+                    break;
+            }
+
+            if (!_finished)
             {
                 context.Wait(MessageReceivedAsync);
             }
