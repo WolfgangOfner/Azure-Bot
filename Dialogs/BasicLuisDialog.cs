@@ -29,7 +29,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("InternetVideo")]
         public async Task InternetVideoIntent(IDialogContext context, LuisResult result)
         {
-            await Conversation.SendAsync(_activity, () => new InternetVideoDialog());
+            await context.Forward(new InternetVideoDialog(), null, context.Activity, CancellationToken.None);
         }
 
         // Go to https://luis.ai and create a new intent, then train/publish your luis app.
