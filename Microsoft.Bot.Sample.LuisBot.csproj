@@ -177,8 +177,12 @@
     <Compile Include="Dialogs\BasicLuisDialog.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\CommonResponseDialog.cs" />
+    <Compile Include="Dialogs\LocalFilesDialog.cs" />
     <Compile Include="Dialogs\JokeDialog.cs" />
     <Compile Include="Dialogs\NewsletterDialog.cs" />
+    <Compile Include="Dialogs\Mp3Dialog.cs" />
+    <Compile Include="Dialogs\InternetVideoDialog.cs" />
+    <Compile Include="Dialogs\YoutubeDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
