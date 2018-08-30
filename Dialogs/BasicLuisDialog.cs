@@ -219,14 +219,16 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-           context.MakeMessage().Attachments.Add(new Attachment()
-            {
-                ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
-                ContentType = "image/png",
-                Name = "Bender_Rodriguez.png"
-            });
+            await context.Forward(new CommonResponsesDialog("my message"), null, context.Activity, CancellationToken.None);
+            
+           //context.MakeMessage().Attachments.Add(new Attachment()
+           // {
+           //     ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
+           //     ContentType = "image/png",
+           //     Name = "Bender_Rodriguez.png"
+           // });
 
-            await context.PostAsync(context.Activity.AsMessageActivity());
+            // await context.PostAsync(context.Activity.AsMessageActivity());
         }
 
         [LuisIntent("Newsletter")]

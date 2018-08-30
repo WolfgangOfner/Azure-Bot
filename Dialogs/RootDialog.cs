@@ -83,7 +83,7 @@ namespace LuisBot.Dialogs
             }
             else
             {
-                context.EndConversation("Bye bye");
+                context.EndConversation("");
             }
         }
     }

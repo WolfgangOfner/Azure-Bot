@@ -13,10 +13,10 @@ namespace LuisBot.Dialogs
         private readonly string _messageToSend;
         private Activity _activity;
 
-        //public CommonResponsesDialog(string message)
-        //{
-        //    _messageToSend = message;
-        //}
+        public CommonResponsesDialog(string message)
+        {
+            _messageToSend = message;
+        }
 
         // overload constructor to handle activities (card attachments)
         public CommonResponsesDialog(Activity activity)
