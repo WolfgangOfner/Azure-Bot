@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace LuisBot.Dialogs
 {
     [Serializable]
-    public class RootDialog : IDialog<object>
+    public class NewsletterDialog : IDialog<object>
     {
         private static bool _subscribedToNewsletter;
         private int _count;

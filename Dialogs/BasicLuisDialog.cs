@@ -219,7 +219,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new CommonResponsesDialog(""), null, context.Activity, CancellationToken.None);
+            await context.Forward(new AttachmentDialog(), null, context.Activity, CancellationToken.None);
             
            //context.MakeMessage().Attachments.Add(new Attachment()
            // {
@@ -234,7 +234,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Newsletter")]
         public async Task NewsletterIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new RootDialog(), null, context.Activity, CancellationToken.None);
+            await context.Forward(new NewsletterDialog(), null, context.Activity, CancellationToken.None);
         }
 
         private async Task ShowLuisResult(IDialogContext context, LuisResult result)
