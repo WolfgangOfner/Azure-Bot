@@ -1,14 +1,12 @@
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Luis;
-using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LuisBot.Dialogs;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Luis;
+using Microsoft.Bot.Builder.Luis.Models;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -16,16 +14,13 @@ namespace Microsoft.Bot.Sample.LuisBot
     [Serializable]
     public class BasicLuisDialog : LuisDialog<object>
     {
-        private Activity _activity;
-
-        public BasicLuisDialog(Activity activity) : base(new LuisService(new LuisModelAttribute(
+        public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
             ConfigurationManager.AppSettings["LuisAppId"],
             ConfigurationManager.AppSettings["LuisAPIKey"],
             domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
         {
-            _activity = activity;
         }
-     
+
         [LuisIntent("InternetVideo")]
         public async Task InternetVideoIntent(IDialogContext context, LuisResult result)
         {
@@ -37,20 +32,20 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Greeting")]
         public async Task GreetingIntent(IDialogContext context, LuisResult result)
         {
-            await this.ShowLuisResult(context, result);
+            await ShowLuisResult(context, result);
         }
 
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
             await context.Forward(new AttachmentDialog(), null, context.Activity, CancellationToken.None);
-            
-           //context.MakeMessage().Attachments.Add(new Attachment()
-           // {
-           //     ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
-           //     ContentType = "image/png",
-           //     Name = "Bender_Rodriguez.png"
-           // });
+
+            //context.MakeMessage().Attachments.Add(new Attachment()
+            // {
+            //     ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
+            //     ContentType = "image/png",
+            //     Name = "Bender_Rodriguez.png"
+            // });
 
             // await context.PostAsync(context.Activity.AsMessageActivity());
         }
@@ -71,13 +66,11 @@ namespace Microsoft.Bot.Sample.LuisBot
         public async Task JokeIntent(IDialogContext context, LuisResult result)
         {
             //await context.PostAsync($"Tow mice chewing on a film roll. One of them goes: \"I think the book was better.\"... Sorry I am not funny");
-            string message = $"Let's see...I know a good joke...";
+            var message = $"Let's see...I know a good joke...";
 
             await context.PostAsync(message);
 
             await context.Forward(new JokeDialog(), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
-
-
         }
 
         [LuisIntent("Öffnungszeiten")]
@@ -111,7 +104,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
         {
-            string test = await result;
+            var test = await result;
 
             if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
             {
@@ -123,7 +116,6 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
 
             context.Wait(MessageReceived);
-
         }
     }
 }
