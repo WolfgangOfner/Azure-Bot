@@ -71,7 +71,7 @@ namespace LuisBot.Dialogs
                     _count++;
                     break;
                 case 3:
-                    await context.PostAsync("Sie haben den Newsletter abonniert");
+                    await context.PostAsync($"Herzlich willkommen, {message}. Sie haben den Newsletter abonniert");
                     _subscribedToNewsletter = true;
                     _finished = true;
                     break;
@@ -80,6 +80,10 @@ namespace LuisBot.Dialogs
             if (!_finished)
             {
                 context.Wait(MessageReceivedAsync);
+            }
+            else
+            {
+                context.Done<object>(null);
             }
         }
     }
