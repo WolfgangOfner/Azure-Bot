@@ -21,10 +21,34 @@ namespace Microsoft.Bot.Sample.LuisBot
         {
         }
 
+        [LuisIntent("InternetDatei")]
+        public async Task InternetDateiIntent(IDialogContext context, LuisResult result)
+        {
+            await context.Forward(new InternetImageDialog(), null, context.Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("InternetBild")]
+        public async Task InternetBildIntent(IDialogContext context, LuisResult result)
+        {
+            await context.Forward(new InternetImageDialog(), null, context.Activity, CancellationToken.None);
+        }
+
         [LuisIntent("InternetVideo")]
         public async Task InternetVideoIntent(IDialogContext context, LuisResult result)
         {
             await context.Forward(new InternetVideoDialog(), null, context.Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("Mp3")]
+        public async Task MP3DialogIntent(IDialogContext context, LuisResult result)
+        {
+            await context.Forward(new Mp3Dialog(), null, context.Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("Youtube")]
+        public async Task YoutubeIntent(IDialogContext context, LuisResult result)
+        {
+            await context.Forward(new YoutubeDialog(), null, context.Activity, CancellationToken.None);
         }
 
         // Go to https://luis.ai and create a new intent, then train/publish your luis app.
@@ -38,7 +62,6 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new AttachmentDialog(), null, context.Activity, CancellationToken.None);
 
             //context.MakeMessage().Attachments.Add(new Attachment()
             // {

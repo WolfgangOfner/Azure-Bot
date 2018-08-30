@@ -173,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Dialogs\AttachmentDialog Class.cs" />
     <Compile Include="Dialogs\BasicLuisDialog.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\CommonResponseDialog.cs" />
@@ -182,6 +181,8 @@
     <Compile Include="Dialogs\NewsletterDialog.cs" />
     <Compile Include="Dialogs\Mp3Dialog.cs" />
     <Compile Include="Dialogs\InternetVideoDialog.cs" />
+    <Compile Include="Dialogs\InternetFIleAttachmentDialog.cs" />
+    <Compile Include="Dialogs\InternetImageDialog.cs" />
     <Compile Include="Dialogs\YoutubeDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
