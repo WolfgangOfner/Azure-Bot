@@ -216,10 +216,17 @@ namespace Microsoft.Bot.Sample.LuisBot
             await this.ShowLuisResult(context, result);
         }
 
-        [LuisIntent("Cancel")]
-        public async Task CancelIntent(IDialogContext context, LuisResult result)
+        [LuisIntent("CardAction")]
+        public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-            await this.ShowLuisResult(context, result);
+           context.MakeMessage().Attachments.Add(new Attachment()
+            {
+                ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
+                ContentType = "image/png",
+                Name = "Bender_Rodriguez.png"
+            });
+
+            await context.PostAsync(context.Activity.AsMessageActivity());
         }
 
         [LuisIntent("Newsletter")]
