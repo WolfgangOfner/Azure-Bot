@@ -133,12 +133,9 @@ namespace Microsoft.Bot.Sample.LuisBot
                         break;
                 }
             }
-            else
-            {
-                await context.PostAsync($"Entity null");
-            }
-
+            
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
+            //context.EndConversation("200");
         }
     }
 }

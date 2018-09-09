@@ -17,9 +17,11 @@ namespace LuisBot.Dialogs
             _gender = gender;
         }
 
-        public async Task StartAsync(IDialogContext context)
+        public Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
+
+            return Task.CompletedTask;
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
