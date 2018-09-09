@@ -17,10 +17,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
-            // Confirmation that we're in the JokeDialog, forwarded from the LUIS dialog
-            var response = "What time does the duck wake up? At the quack of dawn!";
-
-           await  context.PostAsync(response);
+           await context.PostAsync("What time does the duck wake up? At the quack of dawn!");
         }
     }
 }

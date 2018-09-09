@@ -24,15 +24,14 @@ namespace LuisBot.Dialogs
 
             return Task.CompletedTask;
         }
-
-        public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var reply = context.MakeMessage();
 
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             reply.Attachments = GetCardsAttachments();
 
-            JsonConvert.SerializeObject(context.PostAsync(reply));
+            await context.PostAsync(reply);
 
             context.EndConversation("");
         }
