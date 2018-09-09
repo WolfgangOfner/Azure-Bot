@@ -85,10 +85,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Joke ")]
         public async Task JokeIntent(IDialogContext context, LuisResult result)
         {
-            //await context.PostAsync($"Tow mice chewing on a film roll. One of them goes: \"I think the book was better.\"... Sorry I am not funny");
-            var message = $"Let's see...I know a good joke...";
-
-            await context.PostAsync(message);
+            await context.PostAsync("Let's see...I know a good joke...");
 
             await context.Forward(new JokeDialog(), null, context.Activity, CancellationToken.None);
         }
@@ -136,6 +133,12 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
             
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("")]
+        public async Task UnknownInputIntent(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("Ich bin noch im Training von verstehe Sie leider nicht.");
         }
     }
 }
