@@ -135,8 +135,6 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
             
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
-
-            context.EndConversation("200");
         }
     }
 }
