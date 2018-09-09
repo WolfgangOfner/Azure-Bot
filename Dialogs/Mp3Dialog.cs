@@ -15,7 +15,7 @@ namespace LuisBot.Dialogs
             var replyMessage = context.MakeMessage();
 
             var attachment = GetinternetMP3Attachment();
-            replyMessage.Text = "MP3 from the internet";
+            replyMessage.Text = "MP3 aus dem Internet";
 
             replyMessage.Attachments = new List<Attachment> {attachment};
 

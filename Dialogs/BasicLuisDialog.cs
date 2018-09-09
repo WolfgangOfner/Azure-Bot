@@ -24,7 +24,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("InternetDatei")]
         public async Task InternetDateiIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new InternetImageDialog(), null, context.Activity, CancellationToken.None);
+            await context.Forward(new InternetFileAttachmentDialog(), null, context.Activity, CancellationToken.None);
         }
 
         [LuisIntent("InternetBild")]
@@ -40,7 +40,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
 
         [LuisIntent("Mp3")]
-        public async Task MP3DialogIntent(IDialogContext context, LuisResult result)
+        public async Task Mp3DialogIntent(IDialogContext context, LuisResult result)
         {
             await context.Forward(new Mp3Dialog(), null, context.Activity, CancellationToken.None);
         }

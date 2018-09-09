@@ -1,12 +1,12 @@
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-
-using Microsoft.Bot.Connector;
-using Microsoft.Bot.Builder.Dialogs;
 using System.Web.Http.Description;
-using System.Net.Http;
-using System.Diagnostics;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -14,8 +14,8 @@ namespace Microsoft.Bot.Sample.LuisBot
     public class MessagesController : ApiController
     {
         /// <summary>
-        /// POST: api/Messages
-        /// receive a message from a user and send replies
+        ///     POST: api/Messages
+        ///     receive a message from a user and send replies
         /// </summary>
         /// <param name="activity"></param>
         [ResponseType(typeof(void))]
@@ -30,33 +30,50 @@ namespace Microsoft.Bot.Sample.LuisBot
             {
                 HandleSystemMessage(activity);
             }
-            return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
+
+            return new HttpResponseMessage(HttpStatusCode.Accepted);
         }
 
         private Activity HandleSystemMessage(Activity message)
         {
-            if (message.Type == ActivityTypes.DeleteUserData)
+            var messageType = message.GetActivityType();
+
+            switch (messageType)
             {
-                // Implement user deletion here
-                // If we handle user deletion, return a real message
-            }
-            else if (message.Type == ActivityTypes.ConversationUpdate)
-            {
-                // Handle conversation state changes, like members being added and removed
-                // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
-            }
-            else if (message.Type == ActivityTypes.ContactRelationUpdate)
-            {
-                // Handle add/remove from contact lists
-                // Activity.From + Activity.Action represent what happened
-            }
-            else if (message.Type == ActivityTypes.Typing)
-            {
-                // Handle knowing tha the user is typing
-            }
-            else if (message.Type == ActivityTypes.Ping)
-            {
+                case ActivityTypes.DeleteUserData:
+                    break;
+
+                case ActivityTypes.ConversationUpdate:
+                    IConversationUpdateActivity update = message;
+                    var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
+
+                    if (update.MembersAdded != null && update.MembersAdded.Any())
+                    {
+                        foreach (var newMember in update.MembersAdded)
+                        {
+                            if (newMember.Id != message.Recipient.Id)
+                            {
+                                var reply = message.CreateReply();
+                                reply.Text = "Hallo. Ich bin der PKZ Chat Bot Trainee. Wie kann ich Ihnen helfen?";
+                                client.Conversations.ReplyToActivityAsync(reply);
+                            }
+                        }
+                    }
+
+                    break;
+
+                case ActivityTypes.ContactRelationUpdate:
+                    break;
+
+                case ActivityTypes.Typing:
+                    // Handle knowing that the user is typing
+                    break;
+
+                case ActivityTypes.Ping:
+                    break;
+
+                default:
+                    break;
             }
 
             return null;

@@ -15,7 +15,7 @@ namespace LuisBot.Dialogs
             var replyMessage = context.MakeMessage();
 
             var attachment = GetinternetVideoAttachment();
-            replyMessage.Text = "Video from the internet";
+            replyMessage.Text = "Video aus dem Internet";
 
             replyMessage.Attachments = new List<Attachment> { attachment };
 
