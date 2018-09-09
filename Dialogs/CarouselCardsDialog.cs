@@ -20,6 +20,8 @@ namespace LuisBot.Dialogs
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
+
+            context.Done(this);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
