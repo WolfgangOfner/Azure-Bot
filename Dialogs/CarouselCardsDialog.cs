@@ -10,11 +10,11 @@ namespace LuisBot.Dialogs
     [Serializable]
     public class CarouselCardsDialog : IDialog<object>
     {
-        private readonly Category _category;
+        private readonly Gender _gender;
 
-        public CarouselCardsDialog(Category category)
+        public CarouselCardsDialog(Gender gender)
         {
-            _category = category;
+            _gender = gender;
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -36,7 +36,7 @@ namespace LuisBot.Dialogs
 
         private IList<Attachment> GetCardsAttachments()
         {
-            if (_category == Category.Men)
+            if (_gender == Gender.Men)
             {
                 return new List<Attachment>
                 {

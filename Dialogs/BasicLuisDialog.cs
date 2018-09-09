@@ -118,7 +118,22 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Bestseller")]
         public async Task BeststellerIntent(IDialogContext context, LuisResult result)
         {
-            await context.Forward(new CarouselCardsDialog(Category.Men), null, context.Activity, CancellationToken.None);
+            var gender = Gender.Women;
+
+            if (result.Intents[0] != null)
+            {
+                switch (result.Intents[0].ToString().ToLower())
+                {
+                    case "men":
+                        gender = Gender.Men;
+                        break;
+                    case "women":
+                        gender = Gender.Women;
+                        break;
+                }
+            }
+
+            await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
     }
 }
