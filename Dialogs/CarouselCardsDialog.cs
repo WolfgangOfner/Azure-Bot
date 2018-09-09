@@ -20,6 +20,13 @@ namespace LuisBot.Dialogs
 
         public Task StartAsync(IDialogContext context)
         {
+            context.Wait(MessageReceivedAsync);
+
+            return Task.CompletedTask;
+        }
+
+        public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
             var reply = context.MakeMessage();
 
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
@@ -27,12 +34,7 @@ namespace LuisBot.Dialogs
 
             JsonConvert.SerializeObject(context.PostAsync(reply));
 
-            return Task.CompletedTask;
-        }
-
-        public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-           
+            context.EndConversation("");
         }
 
         private IList<Attachment> GetCardsAttachments()
