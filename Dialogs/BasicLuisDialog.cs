@@ -6,10 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using LuisBot.Dialogs;
 using LuisBot.Helper;
+using Microsoft.Azure.Documents;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
+using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -135,7 +137,8 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
             
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
-            context.EndConversation("200");
+
+            context.Wait(MessageReceived);
         }
     }
 }
