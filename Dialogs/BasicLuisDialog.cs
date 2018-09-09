@@ -1,13 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using LuisBot.Dialogs;
 using LuisBot.Helper;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using System;
-using System.Configuration;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -63,7 +65,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-
+            
         }
 
         [LuisIntent("Newsletter")]
@@ -118,9 +120,9 @@ namespace Microsoft.Bot.Sample.LuisBot
         {
             var gender = Gender.Women;
 
-            if (result.Intents[0] != null)
+            if (result.Entities[0] != null)
             {
-                switch (result.Intents[0].ToString().ToLower())
+                switch (result.Entities[0].Entity.ToLower())
                 {
                     case "men":
                         gender = Gender.Men;
@@ -131,9 +133,9 @@ namespace Microsoft.Bot.Sample.LuisBot
                 }
             }
 
-            await context.PostAsync($"{result.Intents[0]}");
-            await context.PostAsync($"{result.Intents[0].Intent}");
-            await context.PostAsync($"{result.Intents[0].Score}");
+             await context.PostAsync($"{result.Entities[0]}");
+            await context.PostAsync($"{result.Entities[0].Entity}");
+            await context.PostAsync($"{result.Entities[0].Score}");
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
     }
