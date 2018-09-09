@@ -122,20 +122,22 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             if (result.Entities[0] != null)
             {
+                await context.PostAsync($"{result.Entities[0].Entity}");
                 switch (result.Entities[0].Entity.ToLower())
                 {
-                    case "men":
+                    case "männer":
                         gender = Gender.Men;
                         break;
-                    case "women":
+                    case "frauen":
                         gender = Gender.Women;
                         break;
                 }
             }
+            else
+            {
+                await context.PostAsync($"Entity null");
+            }
 
-             await context.PostAsync($"{result.Entities[0]}");
-            await context.PostAsync($"{result.Entities[0].Entity}");
-            await context.PostAsync($"{result.Entities[0].Score}");
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
     }
