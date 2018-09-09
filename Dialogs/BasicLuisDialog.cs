@@ -136,9 +136,14 @@ namespace Microsoft.Bot.Sample.LuisBot
                 }
             }
             
-            await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
+            await context.Forward(new CarouselCardsDialog(gender), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
 
             context.EndConversation("");
+        }
+
+        private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
+        {
+           await context.PostAsync("ResumeAfterJokeDialog");
         }
     }
 }
