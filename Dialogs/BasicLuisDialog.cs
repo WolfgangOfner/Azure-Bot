@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using LuisBot.Dialogs;
 using LuisBot.Helper;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
+using System;
+using System.Configuration;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -65,7 +63,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
-            
+
         }
 
         [LuisIntent("Newsletter")]
@@ -133,6 +131,9 @@ namespace Microsoft.Bot.Sample.LuisBot
                 }
             }
 
+            await context.PostAsync($"{result.Intents[0]}");
+            await context.PostAsync($"{result.Intents[0].Intent}");
+            await context.PostAsync($"{result.Intents[0].Score}");
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
     }
