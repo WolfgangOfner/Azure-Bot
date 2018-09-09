@@ -120,30 +120,22 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Bestseller")]
         public async Task BeststellerIntent(IDialogContext context, LuisResult result)
         {
-            var gender = Gender.Women;
+            var gender = Category.Women;
 
             if (result.Entities[0] != null)
             {
-                await context.PostAsync($"{result.Entities[0].Entity}");
                 switch (result.Entities[0].Entity.ToLower())
                 {
                     case "männer":
-                        gender = Gender.Men;
+                        gender = Category.Men;
                         break;
                     case "frauen":
-                        gender = Gender.Women;
+                        gender = Category.Women;
                         break;
                 }
             }
             
-            await context.Forward(new CarouselCardsDialog(gender), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
-
-            context.EndConversation("");
-        }
-
-        private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
-        {
-           await context.PostAsync("ResumeAfterJokeDialog");
+            await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
     }
 }

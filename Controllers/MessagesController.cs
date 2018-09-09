@@ -31,6 +31,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 HandleSystemMessage(activity);
             }
 
+            // do NOT put the return statement in one line. It will break the bot!
             var request = Request.CreateResponse(HttpStatusCode.OK);
             return request;
         }

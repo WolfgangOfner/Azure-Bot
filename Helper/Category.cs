@@ -1,6 +1,6 @@
 namespace LuisBot.Helper
 {
-    public enum Gender
+    public enum Category
     {
         Men,
         Women
