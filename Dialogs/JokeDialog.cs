@@ -15,9 +15,11 @@ namespace Microsoft.Bot.Sample.LuisBot
             return Task.CompletedTask;
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+        private static async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
            await context.PostAsync("What time does the duck wake up? At the quack of dawn!");
+
+            context.EndConversation("");
         }
     }
 }
