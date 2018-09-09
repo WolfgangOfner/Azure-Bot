@@ -32,6 +32,8 @@ namespace LuisBot.Dialogs
             reply.Attachments = GetCardsAttachments();
 
             await context.PostAsync(reply);
+            
+            context.EndConversation("");
         }
 
         private IList<Attachment> GetCardsAttachments()
