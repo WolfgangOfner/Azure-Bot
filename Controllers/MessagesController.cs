@@ -31,7 +31,8 @@ namespace Microsoft.Bot.Sample.LuisBot
                 HandleSystemMessage(activity);
             }
 
-            return new HttpResponseMessage(HttpStatusCode.Accepted);
+            var request = Request.CreateResponse(HttpStatusCode.OK);
+            return request;
         }
 
         private Activity HandleSystemMessage(Activity message)
