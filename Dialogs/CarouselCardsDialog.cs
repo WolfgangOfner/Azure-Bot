@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using LuisBot.Helper;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Newtonsoft.Json;
 
 namespace LuisBot.Dialogs
 {
@@ -17,14 +18,16 @@ namespace LuisBot.Dialogs
             _gender = gender;
         }
 
-        public async Task StartAsync(IDialogContext context)
+        public Task StartAsync(IDialogContext context)
         {
             var reply = context.MakeMessage();
 
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             reply.Attachments = GetCardsAttachments();
 
-            await context.PostAsync(reply);
+            JsonConvert.SerializeObject(context.PostAsync(reply));
+
+            return Task.CompletedTask;
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
