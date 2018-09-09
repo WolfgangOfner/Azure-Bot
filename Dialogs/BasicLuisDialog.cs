@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LuisBot.Dialogs;
+using LuisBot.Helper;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -14,11 +17,13 @@ namespace Microsoft.Bot.Sample.LuisBot
     [Serializable]
     public class BasicLuisDialog : LuisDialog<object>
     {
-        public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
+        private Activity _activity;
+        public BasicLuisDialog(Activity activity) : base(new LuisService(new LuisModelAttribute(
             ConfigurationManager.AppSettings["LuisAppId"],
             ConfigurationManager.AppSettings["LuisAPIKey"],
             domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
         {
+            _activity = activity;
         }
 
         [LuisIntent("InternetDatei")]
@@ -62,15 +67,19 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("CardAction")]
         public async Task CardActionIntent(IDialogContext context, LuisResult result)
         {
+            var reply = _activity.CreateReply("I have colors in mind, but need your help to choose the best one.");
+            reply.Type = ActivityTypes.Message;
+            reply.TextFormat = TextFormatTypes.Plain;
 
-            //context.MakeMessage().Attachments.Add(new Attachment()
-            // {
-            //     ContentUrl = "https://upload.wikimedia.org/wikipedia/en/a/a6/Bender_Rodriguez.png",
-            //     ContentType = "image/png",
-            //     Name = "Bender_Rodriguez.png"
-            // });
-
-            // await context.PostAsync(context.Activity.AsMessageActivity());
+            reply.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+                {
+                    new CardAction(){ Title = "Blue", Type=ActionTypes.ImBack, Value="Blue" },
+                    new CardAction(){ Title = "Red", Type=ActionTypes.ImBack, Value="Red" },
+                    new CardAction(){ Title = "Green", Type=ActionTypes.ImBack, Value="Green" }
+                }
+            };
         }
 
         [LuisIntent("Newsletter")]
@@ -93,7 +102,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             await context.PostAsync(message);
 
-            await context.Forward(new JokeDialog(), ResumeAfterJokeDialog, context.Activity, CancellationToken.None);
+            await context.Forward(new JokeDialog(), null, context.Activity, CancellationToken.None);
         }
 
         [LuisIntent("Öffnungszeiten")]
@@ -120,25 +129,10 @@ namespace Microsoft.Bot.Sample.LuisBot
             await context.PostAsync($"{answer}");
         }
 
-        private async Task ResumeAfterJokeDialog(IDialogContext context, IAwaitable<object> result)
+        [LuisIntent("Bestseller")]
+        public async Task BeststellerIntent(IDialogContext context, LuisResult result)
         {
-            //PromptDialog.Text(context, WaitForJokeAnswer, "Again?");
-        }
-
-        private async Task WaitForJokeAnswer(IDialogContext context, IAwaitable<string> result)
-        {
-            var test = await result;
-
-            if (test.Equals("yes", StringComparison.OrdinalIgnoreCase))
-            {
-                await context.PostAsync("yes");
-            }
-            else
-            {
-                await context.PostAsync("no");
-            }
-
-            context.Wait(MessageReceived);
+            await context.Forward(new CarouselCardsDialog(Category.Men), null, context.Activity, CancellationToken.None);
         }
     }
 }
