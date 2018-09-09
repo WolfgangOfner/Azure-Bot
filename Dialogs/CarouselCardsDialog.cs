@@ -87,8 +87,7 @@ namespace LuisBot.Dialogs
             };
         }
 
-        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage,
-            CardAction cardAction)
+        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
         {
             var heroCard = new HeroCard
             {
@@ -102,8 +101,7 @@ namespace LuisBot.Dialogs
             return heroCard.ToAttachment();
         }
 
-        private static Attachment GetThumbnailCard(string title, string subtitle, string text, CardImage cardImage,
-            CardAction cardAction)
+        private static Attachment GetThumbnailCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
         {
             var heroCard = new ThumbnailCard
             {
