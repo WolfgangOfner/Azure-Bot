@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LuisBot.Dialogs;
 using LuisBot.Helper;
-using Microsoft.Azure.Documents;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -64,12 +60,6 @@ namespace Microsoft.Bot.Sample.LuisBot
             await ShowLuisResult(context, result);
         }
 
-        [LuisIntent("CardAction")]
-        public async Task CardActionIntent(IDialogContext context, LuisResult result)
-        {
-            
-        }
-
         [LuisIntent("Newsletter")]
         public async Task NewsletterIntent(IDialogContext context, LuisResult result)
         {
@@ -99,7 +89,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             if (city.Entity.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
             {
                 answer =
-                    "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr";
+                    "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr. \n Das Wetter ist regnerisch, bringen Sie einen Regenschirm";
             }
             else if (city.Entity.Equals("Luzern", StringComparison.OrdinalIgnoreCase))
             {
@@ -131,7 +121,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                         break;
                 }
             }
-            
+
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
         }
 
