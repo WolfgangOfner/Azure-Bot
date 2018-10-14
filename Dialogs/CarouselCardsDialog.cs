@@ -12,10 +12,12 @@ namespace LuisBot.Dialogs
     public class CarouselCardsDialog : IDialog<object>
     {
         private readonly Category _category;
+        private readonly bool _thumbnail;
 
-        public CarouselCardsDialog(Category category)
+        public CarouselCardsDialog(Category category, bool thumbnail = false)
         {
             _category = category;
+            _thumbnail = thumbnail;
         }
 
         public Task StartAsync(IDialogContext context)
@@ -24,19 +26,20 @@ namespace LuisBot.Dialogs
 
             return Task.CompletedTask;
         }
+
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var reply = context.MakeMessage();
 
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            reply.Attachments = GetCardsAttachments();
+            reply.Attachments = _thumbnail ? GetHeroCardAttachments() : GetThumbnailAttachments();
 
             await context.PostAsync(reply);
             
             context.EndConversation("");
         }
 
-        private IList<Attachment> GetCardsAttachments()
+        private IList<Attachment> GetHeroCardAttachments()
         {
             if (_category == Category.Men)
             {
@@ -48,13 +51,63 @@ namespace LuisBot.Dialogs
                         "CHF 899.00",
                         new CardImage( "https://imgsrv.pkz.ch/content/products/338542/00281795_338542_marine_front.550.jpg?404=default-image.png"),
                         new CardAction(ActionTypes.OpenUrl, "Mehr anzeigen", value: "https://www.pkz.ch/de/anzug-2-teilig-mit-karo-2")),
-                    GetThumbnailCard(
+                    GetHeroCard(
                         "ARTIGIANO",
                         "Hemd mit Haifischkragen",
                         "CHF 249.00",
                         new CardImage("https://imgsrv.pkz.ch/content/products/263239/263239_marine_front.550.jpg?404=default-image.png"),
                         new CardAction(ActionTypes.OpenUrl, "Zum Produkt", value: "https://www.pkz.ch/de/61094-hemd-mit-haifischkragen")),
                     GetHeroCard(
+                        "WOOLRICH",
+                        "Daunenparka mit Pelzkragen ARCTIC PARKA",
+                        "CHF 899.00",
+                        new CardImage( "https://imgsrv.pkz.ch/content/products/197596/197596_rot_front.550.jpg?404=default-image.png"),
+                        new CardAction(ActionTypes.OpenUrl, "Learn more", value: "https://www.pkz.ch/de/490110-daunenparka-mit-pelzkragen-arctic-parka")),
+                    GetHeroCard(
+                        "TIGER OF SWEDEN",
+                        "Gilet slim fit",
+                        "CHF 299.00",
+                        new CardImage( "https://imgsrv.pkz.ch/content/products/338529/338529_blau_front.550.jpg?404=default-image.png"),
+                        new CardAction(ActionTypes.OpenUrl, "Learn more", value: "https://www.pkz.ch/de/554848-gilet-slim-fit"))
+                };
+            }
+
+            return new List<Attachment>
+            {
+                GetHeroCard(
+                    "TALBOT RUNHOF",
+                    "Cocktailkleid",
+                    "CHF 1179.00",
+                    new CardImage( "https://imgsrv.pkz.ch/content/products/830557/00291067_830557_rot_front.550.jpg?404=default-image.png"),
+                    new CardAction(ActionTypes.OpenUrl, "Mehr anzeigen", value: "https://www.pkz.ch/de/cocktailkleid-4")),
+                GetHeroCard(
+                    "AKRIS PUNTO",
+                    "Reversibler Lammfellmantel",
+                    "CHF 2990.00",
+                    new CardImage("https://imgsrv.pkz.ch/content/products/806323/00296288_806323_schwarz_front.550.jpg?404=default-image.png"),
+                    new CardAction(ActionTypes.OpenUrl, "Zum Produkt", value: "https://www.pkz.ch/de/reversibler-lammfellmantel"))
+            };
+        }
+
+        private IList<Attachment> GetThumbnailAttachments()
+        {
+            if (_category == Category.Men)
+            {
+                return new List<Attachment>
+                {
+                    GetThumbnailCard(
+                        "HUGO BOSS",
+                        "Anzug 2-teilig mit Karo",
+                        "CHF 899.00",
+                        new CardImage( "https://imgsrv.pkz.ch/content/products/338542/00281795_338542_marine_front.550.jpg?404=default-image.png"),
+                        new CardAction(ActionTypes.OpenUrl, "Mehr anzeigen", value: "https://www.pkz.ch/de/anzug-2-teilig-mit-karo-2")),
+                    GetThumbnailCard(
+                        "ARTIGIANO",
+                        "Hemd mit Haifischkragen",
+                        "CHF 249.00",
+                        new CardImage("https://imgsrv.pkz.ch/content/products/263239/263239_marine_front.550.jpg?404=default-image.png"),
+                        new CardAction(ActionTypes.OpenUrl, "Zum Produkt", value: "https://www.pkz.ch/de/61094-hemd-mit-haifischkragen")),
+                    GetThumbnailCard(
                         "WOOLRICH",
                         "Daunenparka mit Pelzkragen ARCTIC PARKA",
                         "CHF 899.00",
@@ -71,7 +124,7 @@ namespace LuisBot.Dialogs
 
             return new List<Attachment>
             {
-                GetHeroCard(
+                GetThumbnailCard(
                     "TALBOT RUNHOF",
                     "Cocktailkleid",
                     "CHF 1179.00",

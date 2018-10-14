@@ -88,13 +88,11 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             if (city.Entity.Equals("Zürich", StringComparison.OrdinalIgnoreCase))
             {
-                answer =
-                    "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr. \n Das Wetter ist regnerisch, bringen Sie einen Regenschirm";
+                answer = "Die Öffnungszeiten für die Filliale in Zürich sind Montag bis Freitag 8 Uhr - 18 Uhr, Samstags 8 Uhr - 17 Uhr. \n Das Wetter ist regnerisch, bringen Sie einen Regenschirm";
             }
             else if (city.Entity.Equals("Luzern", StringComparison.OrdinalIgnoreCase))
             {
-                answer =
-                    "Die Öffnungszeiten für die Filliale in Luzern sind Montag bis Freitag 9 Uhr - 19 Uhr, Samstags 9 Uhr - 18 Uhr";
+                answer = "Die Öffnungszeiten für die Filliale in Luzern sind Montag bis Freitag 9 Uhr - 19 Uhr, Samstags 9 Uhr - 18 Uhr";
             }
             else
             {
@@ -123,6 +121,27 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
 
             await context.Forward(new CarouselCardsDialog(gender), null, context.Activity, CancellationToken.None);
+        }
+
+        [LuisIntent("Neuheiten")]
+        public async Task NeuheitenIntent(IDialogContext context, LuisResult result)
+        {
+            var gender = Category.Women;
+
+            if (result.Entities[0] != null)
+            {
+                switch (result.Entities[0].Entity.ToLower())
+                {
+                    case "männer":
+                        gender = Category.Men;
+                        break;
+                    case "frauen":
+                        gender = Category.Women;
+                        break;
+                }
+            }
+
+            await context.Forward(new CarouselCardsDialog(gender, true), null, context.Activity, CancellationToken.None);
         }
 
         [LuisIntent("")]
