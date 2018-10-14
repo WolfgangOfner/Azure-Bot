@@ -14,7 +14,7 @@ namespace LuisBot.Dialogs
         {
             var replyMessage = context.MakeMessage();
 
-            var attachment = GetinternetFileAttachment();
+            var attachment = GetInternetFileAttachment();
             replyMessage.Text = "PDF aus dem Internet";
 
             replyMessage.Attachments = new List<Attachment> {attachment};
@@ -24,7 +24,7 @@ namespace LuisBot.Dialogs
             return Task.CompletedTask;
         }
 
-        public static Attachment GetinternetFileAttachment()
+        public static Attachment GetInternetFileAttachment()
         {
             return new Attachment
             {

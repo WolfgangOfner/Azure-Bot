@@ -14,7 +14,7 @@ namespace LuisBot.Dialogs
         {
             var replyMessage = context.MakeMessage();
 
-            var attachment = GetinternetVideoAttachment();
+            var attachment = GetInternetVideoAttachment();
             replyMessage.Text = "Video aus dem Internet";
 
             replyMessage.Attachments = new List<Attachment> { attachment };
@@ -24,7 +24,7 @@ namespace LuisBot.Dialogs
             return Task.CompletedTask;
         }
 
-        public static Attachment GetinternetVideoAttachment()
+        public static Attachment GetInternetVideoAttachment()
         {
             return new VideoCard("Build a great conversationalist", "Bot Demo Video",
                     "Build a great conversationalist",
